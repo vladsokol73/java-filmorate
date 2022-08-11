@@ -16,7 +16,7 @@ public class FilmController {
     protected HashMap<Integer, Film> films = new HashMap<>();
     private final static Logger log = LoggerFactory.getLogger(FilmController.class);
 
-    @PostMapping(value = "/film")
+    @PostMapping(value = "/films")
     public Film createFilm(@RequestBody Film film) {
         if (film.getName().isBlank() || film.getDescription().length() > 200 || film.getReleaseDate().isBefore
                 (LocalDateTime.of(1895, 12, 28, 0, 0)) || film.getDuration().
@@ -29,7 +29,7 @@ public class FilmController {
         return film;
     }
 
-    @PostMapping(value = "/film-update")
+    @PostMapping(value = "/films")
     public Film updateFilm(@RequestBody Film film) {
         if (film.getName() == null || film.getDescription().length() > 200 || film.getReleaseDate().isBefore
                 (LocalDateTime.of(1895, 12, 28, 0, 0)) || film.getDuration().
