@@ -10,8 +10,4 @@ public class User {
     protected String login;
     protected String name;
     protected LocalDateTime birthday;
-
-    public User() {
-
-    }
 }
