@@ -40,14 +40,15 @@ public class UserControllerTest {
 
     @Test
     public void time() {
+        LocalDateTime dateTime = LocalDateTime.now().minusSeconds(30);
         User user = User.builder()
                 .id(1)
                 .name("jojo")
                 .email("sokol@list.ru")
                 .login("bebra")
-                .birthday(LocalDateTime.now().minusSeconds(30))
+                .birthday(dateTime)
                 .build();
-        Assertions.assertEquals(userController.createUser(user).getBirthday(), LocalDateTime.now().minusSeconds(30));
+        Assertions.assertEquals(userController.createUser(user).getBirthday(), dateTime);
     }
 
     @Test
