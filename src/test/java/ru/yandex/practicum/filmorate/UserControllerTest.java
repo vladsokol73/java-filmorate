@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.User;
@@ -11,63 +13,52 @@ public class UserControllerTest {
     UserController userController = new UserController();
 
     @Test
-    public void shouldMailWasBlank() {
+    public void mail() {
         User user = User.builder()
+                .id(1)
                 .name("jojo")
-                .email("")
+                .email("sokol@list.ru")
                 .login("bebra")
                 .birthday(LocalDateTime.of(1999, 9, 21, 0, 0))
                 .build();
 
-        Assertions.assertEquals(userController.createUser(user), user, "ошибка валидации");
+        Assertions.assertEquals(userController.createUser(user).getEmail(), "sokol@list.ru");
     }
 
     @Test
-    public void shouldMailWasIncorrect() {
+    public void login() {
         User user = User.builder()
+                .id(1)
                 .name("jojo")
-                .email("bober")
+                .email("sokol@list.ru")
                 .login("bebra")
                 .birthday(LocalDateTime.of(1999, 9, 21, 0, 0))
                 .build();
 
-        Assertions.assertEquals(userController.createUser(user), user, "ошибка валидации");
+        Assertions.assertEquals(userController.createUser(user).getLogin(), "bebra");
     }
 
     @Test
-    public void shouldLoginWasIncorrect() {
+    public void time() {
         User user = User.builder()
+                .id(1)
                 .name("jojo")
-                .email("bsbs@list.ru")
-                .login("asdd dd")
-                .birthday(LocalDateTime.of(1999, 9, 21, 0, 0))
+                .email("sokol@list.ru")
+                .login("bebra")
+                .birthday(LocalDateTime.now().minusSeconds(30))
                 .build();
-
-        Assertions.assertEquals(userController.createUser(user), user, "ошибка валидации");
+        Assertions.assertEquals(userController.createUser(user).getBirthday(), LocalDateTime.now().minusSeconds(30));
     }
 
     @Test
-    public void shouldLoginWasBlank() {
+    public void name() {
         User user = User.builder()
-                .name("jojo")
-                .email("bsbs@list.ru")
-                .login("")
-                .birthday(LocalDateTime.of(1999, 9, 21, 0, 0))
-                .build();
-
-        Assertions.assertEquals(userController.createUser(user), user, "ошибка валидации");
-    }
-
-    @Test
-    public void shouldTimeWasFuture() {
-        User user = User.builder()
+                .id(1)
                 .name("")
-                .email("bsbs@list.ru")
+                .email("sokol@list.ru")
                 .login("bebra")
-                .birthday(LocalDateTime.of(2025, 9, 21, 0, 0))
+                .birthday(LocalDateTime.now().minusSeconds(30))
                 .build();
-        userController.createUser(user);
-        Assertions.assertEquals(userController.createUser(user), user, "ошибка валидации");
+        Assertions.assertEquals(userController.createUser(user).getName(), "bebra");
     }
-
 }
