@@ -12,24 +12,24 @@ public class FilmControllerTest {
     FilmController filmController = new FilmController();
 
     @Test
-    public void shouldNameWasBlank() {
+    public void name() {
         Film film = Film.builder()
-                .name(" ")
+                .name("bibus")
                 .description("sas")
                 .releaseDate(LocalDateTime.now())
                 .duration(Duration.ofHours(1))
                 .build();
-
-        Assertions.assertEquals(filmController.createFilm(film), film, "ошибка валидации");
+        Assertions.assertEquals(film.getName(), "bibus");
     }
 
     @Test
     public void shouldDescriptionWasOut() {
         Film film = Film.builder()
+                .id(1)
                 .name("jojo")
                 .description("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
                         "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
-                        "ssssssssssssssssssssssss")
+                        "sssssssssssssssssssssss")
                 .releaseDate(LocalDateTime.now())
                 .duration(Duration.ofHours(1))
                 .build();
@@ -42,7 +42,7 @@ public class FilmControllerTest {
         Film film = Film.builder()
                 .name("jojo")
                 .description("sas")
-                .releaseDate(LocalDateTime.of(1895, 12, 27, 23, 59))
+                .releaseDate(LocalDateTime.of(1895, 12, 28, 0, 1))
                 .duration(Duration.ofHours(1))
                 .build();
 
@@ -55,7 +55,7 @@ public class FilmControllerTest {
                 .name("jojo")
                 .description("sas")
                 .releaseDate(LocalDateTime.now())
-                .duration(Duration.ofHours(-1))
+                .duration(Duration.ofHours(1))
                 .build();
 
         Assertions.assertEquals(filmController.createFilm(film), film, "ошибка валидации");

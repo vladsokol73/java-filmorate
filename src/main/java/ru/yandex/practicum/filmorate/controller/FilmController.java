@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 @RestController
 public class FilmController {
-    protected HashMap<Integer, Film> films;
+    protected HashMap<Integer, Film> films = new HashMap<>();
     private final static Logger log = LoggerFactory.getLogger(FilmController.class);
 
     @PostMapping(value = "/film")
