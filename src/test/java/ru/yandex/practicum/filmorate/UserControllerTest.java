@@ -59,25 +59,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldNameWasBlank() {
-        User user = User.builder()
-                .name("")
-                .email("bsbs@list.ru")
-                .login("bebra")
-                .birthday(LocalDateTime.of(1999, 9, 21, 0, 0))
-                .build();
-        userController.createUser(user);
-        Assertions.assertEquals(user.getName(), user.getLogin());
-    }
-
-    @Test
     public void shouldTimeWasFuture() {
         User user = User.builder()
                 .name("")
                 .email("bsbs@list.ru")
                 .login("bebra")
-                .birthday(LocalDateTime.of(1999, 9, 21, 0, 0))
-                .birthday(LocalDateTime.now())
+                .birthday(LocalDateTime.of(2025, 9, 21, 0, 0))
                 .build();
         userController.createUser(user);
         Assertions.assertEquals(userController.createUser(user), user, "ошибка валидации");
