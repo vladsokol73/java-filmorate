@@ -17,7 +17,7 @@ public class UserController {
     protected HashMap<Integer, User> users = new HashMap<>();
     private final static Logger log = LoggerFactory.getLogger(UserController.class);
 
-    @PostMapping(value = "/user")
+    @PostMapping(value = "/users")
     public User createUser(@RequestBody User user) {
         if (user.getEmail().isBlank() || user.getEmail().contains("@") != true || user.getLogin().isBlank() ||
                 user.getLogin().contains(" ") || user.getBirthday().isAfter(LocalDateTime.now())) {
@@ -32,7 +32,7 @@ public class UserController {
         return user;
     }
 
-    @PostMapping(value = "/user-update")
+    @PostMapping(value = "/users")
     public User updateUser(@RequestBody User user) {
         if (user != null) {
             users.put(user.getId(), user);
