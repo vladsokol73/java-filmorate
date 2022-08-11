@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 @RestController
 public class UserController {
-    protected HashMap<Integer, User> users;
+    protected HashMap<Integer, User> users = new HashMap<>();
     private final static Logger log = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping(value = "/user")
