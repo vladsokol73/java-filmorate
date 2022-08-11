@@ -1,48 +1,78 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.model.User;
+import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.validate.UserDataValidate;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+//создание пользователя;
+//обновление пользователя;
+//получение списка всех пользователей.
 
 @RestController
+@Slf4j
 public class UserController {
-    protected HashMap<Integer, User> users = new HashMap<>();
-    private final static Logger log = LoggerFactory.getLogger(UserController.class);
+    private Map<Integer, User> users = new HashMap<>();
+
+    private static int id = 0;
+
+    public int getId() {
+        this.id++;
+        return id;
+    }
 
     @PostMapping(value = "/users")
-    public User createUser(@RequestBody User user) {
-        if (user.getEmail().isBlank() || user.getEmail().contains("@") != true || user.getLogin().isBlank() ||
-                user.getLogin().contains(" ") || user.getBirthday().isAfter(LocalDateTime.now())) {
-            throw new ValidationException("ошибка валидации");
+    @ResponseBody
+    public ResponseEntity<User> createUser(@RequestBody User user) {//создание пользователя;
+        if(user.getName().isEmpty()) {
+            user.setName(user.getLogin());
+        }
+        if(new UserDataValidate(user).checkAllData()) {
+            user.setId(getId());
+            users.put(user.getId(), user);
+            log.info("Получен запрос к эндпоинту: POST /users" + user);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
         } else {
-            if (user.getName().isBlank()) {
-                user.setName(user.getLogin());
-            }
-            users.put(user.getId(), user);
-            log.debug("Добавили юзера" + user);
+            log.warn("Запрос к эндпоинту POST /users не обработан.");
+            throw new ValidationException("Одно или несколько условий не выполняются");
         }
-        return user;
+    }
+    @PutMapping(value = "/users")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<User> updateUser(@RequestBody User user) {//обновление пользователя;
+        if(user.getName().isEmpty()) {
+            user.setName(user.getEmail());
+        }
+        if(new UserDataValidate(user).checkAllData() && user.getId() > 0) {
+            log.info("Получен запрос к эндпоинту: PUT /users");
+            users.put(user.getId(), user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            log.warn("Запрос к эндпоинту PUT /users не обработан.");
+            throw new ValidationException("Одно или несколько условий не выполняются");
+        }
     }
 
-    @PostMapping(value = "/users")
-    public User updateUser(@RequestBody User user) {
-        if (user != null) {
-            users.put(user.getId(), user);
-            log.debug("Обновили юзера" + user);
-        }
-        return user;
-    }
 
     @GetMapping("/users")
-    public HashMap getAllUsers() {
-        return users;
+    public List<User> findAllUsers() {//получение списка всех пользователей.
+        return new ArrayList<>(users.values());
     }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<String> handleException(ValidationException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
 }

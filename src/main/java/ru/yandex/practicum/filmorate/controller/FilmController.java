@@ -1,49 +1,70 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.validate.FilmDataValidate;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+//добавление фильма;
+//обновление фильма;
+//получение всех фильмов.
 
 @RestController
+@Slf4j
 public class FilmController {
-    protected HashMap<Integer, Film> films = new HashMap<>();
-    private final static Logger log = LoggerFactory.getLogger(FilmController.class);
 
-    @PostMapping(value = "/films")
-    public Film createFilm(@RequestBody Film film) {
-        if (film.getName().isBlank() || film.getDescription().length() > 200 || film.getReleaseDate().isBefore
-                (LocalDateTime.of(1895, 12, 28, 0, 0)) || film.getDuration().
-                isNegative() || film.getDuration().isZero()) {
-            throw new ValidationException("ошибка валидации");
-        } else {
-            films.put(film.getId(), film);
-            log.debug("Добавили фильм" + film);
-        }
-        return film;
+    private final Map<Integer, Film> films = new HashMap<>();
+
+    private static int id = 0;
+
+    public int getId() {
+        this.id++;
+        return id;
     }
 
-    @PostMapping(value = "/films")
-    public Film updateFilm(@RequestBody Film film) {
-        if (film.getName() == null || film.getDescription().length() > 200 || film.getReleaseDate().isBefore
-                (LocalDateTime.of(1895, 12, 28, 0, 0)) || film.getDuration().
-                isNegative() || film.getDuration().isZero()) {
-            throw new ValidationException("ошибка валидации");
-        } else {
+    @PostMapping("/films")
+    @ResponseBody
+    public ResponseEntity<Film> createFilm(@RequestBody Film film) { //добавление фильма;
+        if(new FilmDataValidate(film).checkAllData()) {
+            log.info("Получен запрос к эндпоинту: POST /films");
+            film.setId(getId());
             films.put(film.getId(), film);
-            log.debug("Изменили фильм" + film);
+            return new ResponseEntity<>(film, HttpStatus.CREATED);
+        } else {
+            log.warn("Запрос к эндпоинту POST не обработан. Введеные данные о фильме не удовлетворяют условиям");
+            throw new ValidationException("Одно или несколько из условий не выполняются.");
         }
-        return film;
+    }
+
+    @PutMapping("/films")
+    @ResponseBody
+    public ResponseEntity<Film> updateFilm(@RequestBody Film film) { //обновление фильма;
+        if(new FilmDataValidate(film).checkAllData() && film.getId() > 0) {
+            log.info("Получен запрос к эндпоинту: PUT /films");
+            films.put(film.getId(), film);
+            return new ResponseEntity<>(film, HttpStatus.OK);
+        } else {
+            log.warn("Запрос к эндпоинту POST не обработан. Введеные данные о фильме не удовлетворяют условиям");
+            throw new ValidationException("Одно или несколько из условий не выполняются.");
+        }
     }
 
     @GetMapping("/films")
-    public HashMap getAllFilms() {
-        return films;
+    public List<Film> findAllFilms() { // получение всех фильмов.
+        return new ArrayList<>(films.values());
     }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<String> handleException(ValidationException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }
