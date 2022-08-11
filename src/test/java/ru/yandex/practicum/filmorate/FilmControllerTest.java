@@ -14,7 +14,7 @@ public class FilmControllerTest {
     @Test
     public void shouldNameWasBlank() {
         Film film = Film.builder()
-                .name("jojo")
+                .name(" ")
                 .description("sas")
                 .releaseDate(LocalDateTime.now())
                 .duration(Duration.ofHours(1))
