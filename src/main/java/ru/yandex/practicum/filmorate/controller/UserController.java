@@ -34,7 +34,7 @@ public class UserController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<User> createUser(@RequestBody User user) {//создание пользователя;
-        if(user.getName().isEmpty()) {
+        if(user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         if(new UserDataValidate(user).checkAllData()) {
