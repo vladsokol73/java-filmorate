@@ -26,7 +26,7 @@ public class UserController {
 
     private static int id = 0;
 
-    public int getId() {
+    private int getId() {
         this.id++;
         return id;
     }
