@@ -19,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @Slf4j
+@RequestMapping("/films")
 public class FilmController {
 
     private final Map<Integer, Film> films = new HashMap<>();
@@ -30,7 +31,7 @@ public class FilmController {
         return id;
     }
 
-    @PostMapping("/films")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<Film> createFilm(@RequestBody Film film) { //добавление фильма;
         if(new FilmDataValidate(film).checkAllData()) {
@@ -44,7 +45,7 @@ public class FilmController {
         }
     }
 
-    @PutMapping("/films")
+    @PutMapping
     @ResponseBody
     public ResponseEntity<Film> updateFilm(@RequestBody Film film) { //обновление фильма;
         if(new FilmDataValidate(film).checkAllData() && film.getId() > 0) {
@@ -57,7 +58,7 @@ public class FilmController {
         }
     }
 
-    @GetMapping("/films")
+    @GetMapping
     public List<Film> findAllFilms() { // получение всех фильмов.
         return new ArrayList<>(films.values());
     }
