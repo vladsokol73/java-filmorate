@@ -20,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @Slf4j
+@RequestMapping("/users")
 public class UserController {
     private Map<Integer, User> users = new HashMap<>();
 
@@ -30,7 +31,7 @@ public class UserController {
         return id;
     }
 
-    @PostMapping(value = "/users")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<User> createUser(@RequestBody User user) {//создание пользователя;
         if(user.getName().isEmpty()) {
@@ -46,7 +47,7 @@ public class UserController {
             throw new ValidationException("Одно или несколько условий не выполняются");
         }
     }
-    @PutMapping(value = "/users")
+    @PutMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<User> updateUser(@RequestBody User user) {//обновление пользователя;
@@ -64,7 +65,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/users")
+    @GetMapping
     public List<User> findAllUsers() {//получение списка всех пользователей.
         return new ArrayList<>(users.values());
     }
