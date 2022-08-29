@@ -21,23 +21,23 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Optional<Film> createFilm(Film film) {
 
-            if (film.getName().isBlank() || film.getName() == null) {
-                throw new ValidateException("пустое наменование фильма");
-            }
-            if (film.getDescription().length() > 200) {
-                throw new ValidateException("размер описания превышает 200 символов");
-            }
+        if (film.getName().isBlank() || film.getName() == null) {
+            throw new ValidateException("пустое наименование фильма");
+        }
+        if (film.getDescription().length() > 200) {
+            throw new ValidateException("размер описания превышает 200 символов");
+        }
 
-            if (film.getDescription().isBlank() || film.getDescription() == null) {
-                throw new ValidateException("пустое описание");
-            }
+        if (film.getDescription().isBlank() || film.getDescription() == null) {
+            throw new ValidateException("пустое описание");
+        }
 
-            if (film.getReleaseDate().isBefore(LOW_RELEASE_DATE)) {
-                throw new ValidateException("дата релиза неверна");
-            }
-            if (film.getDuration() <= 0) {
-                throw new ValidateException("длительность фильма должна быть положительной");
-            }
+        if (film.getReleaseDate().isBefore(LOW_RELEASE_DATE)) {
+            throw new ValidateException("дата релиза неверна");
+        }
+        if (film.getDuration() <= 0) {
+            throw new ValidateException("длительность фильма должна быть положительной");
+        }
 
         film.setId(getNewId());
         films.put(film.getId(), film);
@@ -93,16 +93,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public List<Optional<Film>> getOrderRate(Integer limit) {
-        return null;
-    }
-
-    @Override
-    public Mpa getMpa(Long idMpa) {
-        return null;
-    }
-
-    @Override
-    public TreeSet<Genre> getGenres(Film film) {
         return null;
     }
 }

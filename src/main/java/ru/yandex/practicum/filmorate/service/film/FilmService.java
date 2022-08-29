@@ -4,7 +4,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.TreeSet;
 
 public interface FilmService {
     Optional<Film> createFilm(Film film);
@@ -24,10 +23,4 @@ public interface FilmService {
     void removeLike(Long idUser, Long idFilm);
 
     List<Optional<Film>> getMaxRating(Integer limit);
-
-    Mpa getMpa(Long idMpa);
-
-    TreeSet<Genre> getGenres(Film film);
-
-
 }

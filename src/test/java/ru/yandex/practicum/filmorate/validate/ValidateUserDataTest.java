@@ -9,21 +9,13 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ValidateUserDataTest {
-    static User user = User.builder()
-            .name("name")
-            .email("email@yandex.ru")
-            .login("login")
-            .birthday(LocalDate.of(1994, 10, 01))
-            .build();
+    static User user = new User(1L, "email@yandex.ru", "name", "login"
+            , LocalDate.of(1994, 10, 1));
 
     @AfterEach
     public void user() {
-        user = User.builder()
-                .name("name")
-                .email("email@yandex.ru")
-                .login("login")
-                .birthday(LocalDate.of(1994, 10, 01))
-                .build();
+        user = new User(1L, "email@yandex.ru", "name", "login"
+                , LocalDate.of(1994, 10, 1));
     }
 
     @Test
@@ -45,7 +37,7 @@ class ValidateUserDataTest {
 
     @Test
     public void incorrectBirthday() {
-        user.setBirthday(LocalDate.of(2025, 10, 01));
+        user.setBirthday(LocalDate.of(2025, 10, 1));
         assertFalse(new UserDataValidate(user).checkAllData());
     }
 }

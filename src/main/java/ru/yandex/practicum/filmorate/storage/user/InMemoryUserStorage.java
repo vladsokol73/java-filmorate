@@ -18,18 +18,18 @@ public class InMemoryUserStorage implements UserStorage {
 
     public Optional<User> createUser(User user) {
 
-            if (user.getName().equals("") || user.getName() == null) {
-                user.setName(user.getLogin());
-            }
-            if (!user.getEmail().contains("@") || user.getEmail().isBlank() || user.getEmail() == null) {
-                throw new ValidateException("неправильный формат email или пустой email");
-            }
-            if (user.getLogin().contains(" ") || user.getLogin().isBlank() || user.getLogin() == null) {
-                throw new ValidateException("пустой логин или содержит пробелы");
-            }
-            if (user.getBirthday().isAfter(LocalDate.now())) {
-                throw new ValidateException("дата рождения указывает на будущее время");
-            }
+        if (user.getName().equals("") || user.getName() == null) {
+            user.setName(user.getLogin());
+        }
+        if (!user.getEmail().contains("@") || user.getEmail().isBlank() || user.getEmail() == null) {
+            throw new ValidateException("неправильный формат email или пустой email");
+        }
+        if (user.getLogin().contains(" ") || user.getLogin().isBlank() || user.getLogin() == null) {
+            throw new ValidateException("пустой логин или содержит пробелы");
+        }
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            throw new ValidateException("дата рождения указывает на будущее время");
+        }
 
 
         user.setId(getNewId());
