@@ -71,12 +71,8 @@ public class InMemoryFilmService implements FilmService {
     }
 
     @Override
-    public List<Optional<Film>> getMaxRating(Integer countRate) {
-        Integer count = countRate;
-        if (count == 0 || count == null) {
-            count = 10;
-        }
-        List<Optional<Film>> listOrder = filmStorage.getOrderRate(count);
+    public List<Optional<Film>> getMaxRating() {
+        List<Optional<Film>> listOrder = filmStorage.getOrderRate();
         return listOrder;
     }
 }

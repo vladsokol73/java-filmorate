@@ -72,9 +72,9 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<Optional<Film>> getPopularFilms(@RequestParam(defaultValue = "0") Integer count) {
-        log.info("запрошены популярные фильмы в количестве {}", ((count == 0) || (count == null) ? 10 : count));
-        return filmService.getMaxRating(count);
+    public List<Optional<Film>> getPopularFilms() {
+        log.info("запрошены популярные фильмы в количестве 10");
+        return filmService.getMaxRating();
     }
 
 }

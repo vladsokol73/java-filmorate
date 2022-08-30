@@ -10,6 +10,7 @@ import java.util.*;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
+    private int bestFilmSize = 10;
     private final Map<Long, Film> films = new HashMap<>();
     private final List<Long> users = new ArrayList<>();
     private static final LocalDate LOW_RELEASE_DATE = LocalDate.of(1895, 12, 28);
@@ -104,8 +105,21 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Optional<Film>> getOrderRate(Integer limit) {
+    public List<Optional<Film>> getOrderRate() {
         List<Optional<Film>> filmRate = new ArrayList<>();
+        while (filmRate.size() != bestFilmSize) {
+            Map<Long, Film> films1 = new HashMap<>();
+            Long max = 0L;
+            Long id = 0L;
+            for (Film f: films1.values()) {
+                if (f.getRate() > max) {
+                    max = f.getRate();
+                    id = f.getId();
+                }
+            }
+            filmRate.add(Optional.of(films1.get(id)));
+            films1.remove(id);
+        }
         return filmRate;
     }
 }
