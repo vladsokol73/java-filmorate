@@ -23,6 +23,4 @@ public class Film {
         this.duration = duration;
         this.rate = rate;
     }
-
-
 }

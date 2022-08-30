@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.controller.NotFoundException;
 import ru.yandex.practicum.filmorate.controller.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -10,6 +11,7 @@ import java.util.*;
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Long, Film> films = new HashMap<>();
+    private final List<Long> users = new ArrayList<>();
     private static final LocalDate LOW_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     private Long newId = 1L;
@@ -47,7 +49,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Optional<Film> updateFilm(Film film) {
         if (film.getId() <= 0) {
-            throw new ValidateException("id должен быть > 0");
+            throw new NotFoundException("id должен быть > 0");
         }
         films.put(film.getId(), film);
         return Optional.of(film);
@@ -64,7 +66,9 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void deleteFilm(Long id) {
-        Film film = films.get(id);
+        if (films.get(id) == null) {
+            throw new NotFoundException("film not found");
+        }
         films.remove(id);
     }
 
@@ -76,23 +80,32 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Optional<Film> getById(Long id) {
         if (films.get(id) == null) {
-            throw new ValidateException("film not found");
+            throw new NotFoundException("film not found");
         }
         return Optional.of(films.get(id));
     }
 
     @Override
     public void addLike(Long idUser, Long idFilm) {
-
+        if (films.get(idFilm) == null || idUser == null || idUser <= 0) {
+            throw new NotFoundException("film not found");
+        }
+        users.add(idUser);
+        films.get(idFilm).setRate(films.get(idFilm).getRate() + 1);
     }
 
     @Override
     public void removeLike(Long idUser, Long idFilm) {
-
+        if (films.get(idFilm) == null || idUser == null || idUser <= 0) {
+            throw new NotFoundException("film not found");
+        }
+        users.remove(idUser);
+        films.get(idFilm).setRate(films.get(idFilm).getRate() - 1);
     }
 
     @Override
     public List<Optional<Film>> getOrderRate(Integer limit) {
-        return null;
+        List<Optional<Film>> filmRate = new ArrayList<>();
+        return filmRate;
     }
 }
