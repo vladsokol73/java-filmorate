@@ -80,8 +80,8 @@ public class InMemoryUserStorage implements UserStorage {
         if (users.get(id) == null || users.get(idFriend) == null) {
             throw new NotFoundException("user not found");
         }
-        User user = users.get(id);
-        user.addFriend(idFriend);
+        users.get(id).addFriend(idFriend);
+        users.get(idFriend).addFriend(id);
 
     }
 
