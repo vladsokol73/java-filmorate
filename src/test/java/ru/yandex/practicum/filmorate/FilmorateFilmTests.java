@@ -18,6 +18,11 @@ public class FilmorateFilmTests {
 
     @Autowired
     private FilmController filmController;
+    
+    @AfterEach
+    public void clear() {
+        filmController.deleteFilms();
+    }
 
     @Test
     public void filmControllerValidEntityTest() throws ValidateException {
