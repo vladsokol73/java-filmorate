@@ -19,6 +19,11 @@ public class FilmorateFilmTests {
 
     @Autowired
     private FilmController filmController;
+    
+    @AfterEach
+    public void clear() {
+        filmController.deleteFilms();
+    }
 
     @AfterEach
     public void clear() {
