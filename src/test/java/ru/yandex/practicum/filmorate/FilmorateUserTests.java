@@ -18,7 +18,11 @@ class FilmorateUserTests {
 
     @Autowired
     private UserController userController;
-
+    
+    @AfterEach
+    public void clear() {
+        userController.deleteUsers();
+    }
 
     @Test
     public void userControllerValidEntityTest() throws ValidateException {
