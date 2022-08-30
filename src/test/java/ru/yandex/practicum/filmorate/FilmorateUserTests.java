@@ -19,7 +19,7 @@ class FilmorateUserTests {
 
     @Autowired
     private UserController userController;
-    
+
     @AfterEach
     public void clear() {
         userController.deleteUsers();

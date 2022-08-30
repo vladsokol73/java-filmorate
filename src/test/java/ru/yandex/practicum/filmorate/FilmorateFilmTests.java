@@ -25,6 +25,11 @@ public class FilmorateFilmTests {
         filmController.deleteFilms();
     }
 
+    @AfterEach
+    public void clear() {
+        filmController.deleteFilms();
+    }
+
     @Test
     public void filmControllerValidEntityTest() throws ValidateException {
         Film film =
