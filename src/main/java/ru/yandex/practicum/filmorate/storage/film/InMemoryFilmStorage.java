@@ -98,6 +98,9 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> getOrderRate(Integer count) {
+        if (count == null || count < 1) {
+            throw new ValidateException("Количество фильмов должно быть > 0");
+        }
         List<Film> filmRate = new ArrayList<>();
         if (films.size() < count) {
             count = films.size();
