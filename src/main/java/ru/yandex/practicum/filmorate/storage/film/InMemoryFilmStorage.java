@@ -79,7 +79,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Optional<Film> getById(Long id) {
         if (films.get(id) == null) {
-            throw new IncorrectParameterException("film not found");
+            throw new NotFoundException("film not found");
         }
         return Optional.of(films.get(id));
     }
