@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service.film;
 
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.controller.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.controller.NotFoundException;
 import ru.yandex.practicum.filmorate.controller.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -65,7 +66,7 @@ public class InMemoryFilmService implements FilmService {
         if (filmStorage.getById(idFilm) != null && userStorage.getById(idUser) != null) {
             filmStorage.removeLike(idUser, idFilm);
         } else {
-            throw new ValidateException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
+            throw new IncorrectParameterException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
         }
 
     }
