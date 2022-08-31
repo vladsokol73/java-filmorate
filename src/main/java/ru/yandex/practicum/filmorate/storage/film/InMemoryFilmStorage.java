@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.controller.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.controller.NotFoundException;
 import ru.yandex.practicum.filmorate.controller.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -78,7 +77,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Optional<Film> getById(Long id) {
-        if (films.get(id) == null) {
+        if (films.containsKey(id)) {
             throw new NotFoundException("film not found");
         }
         return Optional.of(films.get(id));
