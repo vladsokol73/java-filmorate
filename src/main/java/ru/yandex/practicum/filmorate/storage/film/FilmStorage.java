@@ -22,5 +22,5 @@ public interface FilmStorage {
 
     void removeLike(Long idUser, Long idFilm);
 
-    List<Optional<Film>> getOrderRate(Integer count);
+    List<Film> getOrderRate(Integer count);
 }

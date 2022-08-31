@@ -52,7 +52,7 @@ public class InMemoryFilmService implements FilmService {
 
     @Override
     public void addLike(Long idFilm, Long idUser) {
-        if (filmStorage.getById(idFilm) != null && userStorage.getById(idUser) != null
+        if (filmStorage.getById(idFilm).isEmpty() && userStorage.getById(idUser).isEmpty()
                 && idFilm > 0 && idUser > 0) {
             filmStorage.addLike(idUser, idFilm);
         } else {
@@ -63,7 +63,7 @@ public class InMemoryFilmService implements FilmService {
 
     @Override
     public void removeLike(Long idFilm, Long idUser) {
-        if (filmStorage.getById(idFilm) != null && userStorage.getById(idUser) != null) {
+        if (filmStorage.getById(idFilm).isEmpty() && userStorage.getById(idUser).isEmpty() && idFilm > 0 && idUser > 0) {
             filmStorage.removeLike(idUser, idFilm);
         } else {
             throw new NotFoundException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
@@ -72,11 +72,11 @@ public class InMemoryFilmService implements FilmService {
     }
 
     @Override
-    public List<Optional<Film>> getMaxRating(Integer count) {
+    public List<Film> getMaxRating(Integer count) {
         if (count == 0 || count == null) {
             count = 10;
         }
-        List<Optional<Film>> listOrder = filmStorage.getOrderRate(count);
+        List<Film> listOrder = filmStorage.getOrderRate(count);
         return listOrder;
     }
 }

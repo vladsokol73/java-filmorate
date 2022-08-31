@@ -86,25 +86,19 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void addLike(Long idUser, Long idFilm) {
-        if (films.get(idFilm) == null || idUser == null || idUser <= 0) {
-            throw new NotFoundException("film not found");
-        }
         users.add(idUser);
         films.get(idFilm).setRate(films.get(idFilm).getRate() + 1);
     }
 
     @Override
     public void removeLike(Long idUser, Long idFilm) {
-        if (films.get(idFilm) == null || idUser == null || idUser <= 0) {
-            throw new NotFoundException("film not found");
-        }
         users.remove(idUser);
         films.get(idFilm).setRate(films.get(idFilm).getRate() - 1);
     }
 
     @Override
-    public List<Optional<Film>> getOrderRate(Integer count) {
-        List<Optional<Film>> filmRate = new ArrayList<>();
+    public List<Film> getOrderRate(Integer count) {
+        List<Film> filmRate = new ArrayList<>();
         if (films.size() < count) {
             count = films.size();
         }
@@ -118,7 +112,7 @@ public class InMemoryFilmStorage implements FilmStorage {
                     id = f.getId();
                 }
             }
-            filmRate.add(Optional.of(films1.get(id)));
+            filmRate.add(films1.get(id));
             films1.remove(id);
         }
         return filmRate;
