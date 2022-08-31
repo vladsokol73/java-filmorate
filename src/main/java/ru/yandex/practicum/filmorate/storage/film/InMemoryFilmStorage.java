@@ -10,7 +10,6 @@ import java.util.*;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-    private int bestFilmSize = 10;
     private final Map<Long, Film> films = new HashMap<>();
     private final List<Long> users = new ArrayList<>();
     private static final LocalDate LOW_RELEASE_DATE = LocalDate.of(1895, 12, 28);
@@ -27,14 +26,12 @@ public class InMemoryFilmStorage implements FilmStorage {
         if (film.getName().isBlank() || film.getName() == null) {
             throw new ValidateException("пустое наименование фильма");
         }
-        if (film.getDescription().length() > 200) {
-            throw new ValidateException("размер описания превышает 200 символов");
-        }
-
         if (film.getDescription().isBlank() || film.getDescription() == null) {
             throw new ValidateException("пустое описание");
         }
-
+        if (film.getDescription().length() > 200) {
+            throw new ValidateException("размер описания превышает 200 символов");
+        }
         if (film.getReleaseDate().isBefore(LOW_RELEASE_DATE)) {
             throw new ValidateException("дата релиза неверна");
         }
@@ -105,10 +102,13 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Optional<Film>> getOrderRate() {
+    public List<Optional<Film>> getOrderRate(Integer count) {
         List<Optional<Film>> filmRate = new ArrayList<>();
-        while (filmRate.size() != bestFilmSize) {
-            Map<Long, Film> films1 = new HashMap<>();
+        if (films.size() < count) {
+            count = films.size();
+        }
+        while (filmRate.size() != count) {
+            Map<Long, Film> films1 = films;
             Long max = 0L;
             Long id = 0L;
             for (Film f: films1.values()) {
