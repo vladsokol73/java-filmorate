@@ -11,7 +11,6 @@ import java.util.*;
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Long, Film> films = new HashMap<>();
-    private final List<Long> users = new ArrayList<>();
     private static final LocalDate LOW_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     private Long newId = 1L;
@@ -77,7 +76,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Optional<Film> getById(Long id) {
-        if (films.containsKey(id)) {
+        if (films.get(id) == null) {
             throw new NotFoundException("film not found");
         }
         return Optional.of(films.get(id));
@@ -85,13 +84,13 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void addLike(Long idUser, Long idFilm) {
-        users.add(idUser);
+        films.get(idFilm).addLike(idUser);
         films.get(idFilm).setRate(films.get(idFilm).getRate() + 1);
     }
 
     @Override
     public void removeLike(Long idUser, Long idFilm) {
-        users.remove(idUser);
+        films.get(idFilm).removeLike(idUser);
         films.get(idFilm).setRate(films.get(idFilm).getRate() - 1);
     }
 
