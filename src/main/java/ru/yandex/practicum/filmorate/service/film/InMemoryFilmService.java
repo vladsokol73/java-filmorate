@@ -52,17 +52,18 @@ public class InMemoryFilmService implements FilmService {
 
     @Override
     public void addLike(Long idFilm, Long idUser) {
-        if (filmStorage.getById(idFilm) != null && userStorage.getById(idUser) != null
-                && !(idFilm <= 0) && !(idUser <= 0)) {
+        if (filmStorage.getById(idFilm).isPresent() && userStorage.getById(idUser).isPresent()
+                && idFilm > 0 && idUser > 0) {
             filmStorage.addLike(idUser, idFilm);
+        } else {
+            throw new NotFoundException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
         }
-        throw new NotFoundException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
     }
 
-    @Override
+        @Override
     public void removeLike(Long idFilm, Long idUser) {
-        if (filmStorage.getById(idFilm) != null && userStorage.getById(idUser) != null
-                && !(idFilm <= 0) && !(idUser <= 0)) {
+        if (filmStorage.getById(idFilm).isPresent() && userStorage.getById(idUser).isPresent()
+                && idFilm > 0 && idUser > 0) {
             filmStorage.removeLike(idUser, idFilm);
         }
         throw new NotFoundException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
