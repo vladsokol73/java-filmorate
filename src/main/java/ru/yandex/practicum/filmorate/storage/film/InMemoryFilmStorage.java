@@ -104,7 +104,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             count = films.size();
         }
         while (filmRate.size() != count) {
-            Map<Long, Film> films1 = films;
+            Map<Long, Film> films1 = new HashMap<>(films);
             Long max = 0L;
             Long id = 0L;
             for (Film f: films1.values()) {
