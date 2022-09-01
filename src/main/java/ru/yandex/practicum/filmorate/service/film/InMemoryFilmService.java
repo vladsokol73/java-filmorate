@@ -65,8 +65,9 @@ public class InMemoryFilmService implements FilmService {
         if (filmStorage.getById(idFilm).isPresent() && userStorage.getById(idUser).isPresent()
                 && idFilm > 0 && idUser > 0) {
             filmStorage.removeLike(idUser, idFilm);
+        } else {
+            throw new NotFoundException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
         }
-        throw new NotFoundException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
     }
 
     @Override
