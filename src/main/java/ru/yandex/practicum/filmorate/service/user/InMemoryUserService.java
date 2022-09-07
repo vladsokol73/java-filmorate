@@ -49,7 +49,7 @@ public class InMemoryUserService implements UserService {
 
     @Override
     public void addFriend(Long id1, Long id2) {
-        if (userStorage.getById(id1) != null && userStorage.getById(id2) != null
+        if (userStorage.getById(id1).isPresent() && userStorage.getById(id2).isPresent()
                 && !(id1 <= 0) && !(id2 <= 0)) {
             userStorage.addFriend(id1, id2);
         } else {
