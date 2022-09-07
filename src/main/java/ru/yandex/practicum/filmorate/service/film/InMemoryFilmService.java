@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service.film;
 
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.controller.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.controller.NotFoundException;
 import ru.yandex.practicum.filmorate.controller.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -51,32 +52,30 @@ public class InMemoryFilmService implements FilmService {
 
     @Override
     public void addLike(Long idFilm, Long idUser) {
-        if (filmStorage.getById(idFilm) != null && userStorage.getById(idUser) != null
+        if (filmStorage.getById(idFilm).isPresent() && userStorage.getById(idUser).isPresent()
                 && idFilm > 0 && idUser > 0) {
             filmStorage.addLike(idUser, idFilm);
         } else {
             throw new NotFoundException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
         }
-
     }
 
-    @Override
+        @Override
     public void removeLike(Long idFilm, Long idUser) {
-        if (filmStorage.getById(idFilm) != null && userStorage.getById(idUser) != null) {
+        if (filmStorage.getById(idFilm).isPresent() && userStorage.getById(idUser).isPresent()
+                && idFilm > 0 && idUser > 0) {
             filmStorage.removeLike(idUser, idFilm);
         } else {
-            throw new ValidateException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
+            throw new NotFoundException("user id=" + idUser + " or film id=" + idFilm + " не найдены");
         }
-
     }
 
     @Override
-    public List<Optional<Film>> getMaxRating(Integer countRate) {
-        Integer count = countRate;
+    public List<Film> getMaxRating(Integer count) {
         if (count == 0 || count == null) {
             count = 10;
         }
-        List<Optional<Film>> listOrder = filmStorage.getOrderRate(count);
+        List<Film> listOrder = filmStorage.getOrderRate(count);
         return listOrder;
     }
 }

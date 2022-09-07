@@ -22,5 +22,5 @@ public interface FilmService {
 
     void removeLike(Long idUser, Long idFilm);
 
-    List<Optional<Film>> getMaxRating(Integer limit);
+    List<Film> getMaxRating(Integer count);
 }

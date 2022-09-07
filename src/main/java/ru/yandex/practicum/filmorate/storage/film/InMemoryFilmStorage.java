@@ -11,7 +11,6 @@ import java.util.*;
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Long, Film> films = new HashMap<>();
-    private final List<Long> users = new ArrayList<>();
     private static final LocalDate LOW_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     private Long newId = 1L;
@@ -26,14 +25,12 @@ public class InMemoryFilmStorage implements FilmStorage {
         if (film.getName().isBlank() || film.getName() == null) {
             throw new ValidateException("пустое наименование фильма");
         }
-        if (film.getDescription().length() > 200) {
-            throw new ValidateException("размер описания превышает 200 символов");
-        }
-
         if (film.getDescription().isBlank() || film.getDescription() == null) {
             throw new ValidateException("пустое описание");
         }
-
+        if (film.getDescription().length() > 200) {
+            throw new ValidateException("размер описания превышает 200 символов");
+        }
         if (film.getReleaseDate().isBefore(LOW_RELEASE_DATE)) {
             throw new ValidateException("дата релиза неверна");
         }
@@ -87,25 +84,38 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void addLike(Long idUser, Long idFilm) {
-        if (films.get(idFilm) == null || idUser == null || idUser <= 0) {
-            throw new NotFoundException("film not found");
-        }
-        users.add(idUser);
+        films.get(idFilm).addLike(idUser);
         films.get(idFilm).setRate(films.get(idFilm).getRate() + 1);
     }
 
     @Override
     public void removeLike(Long idUser, Long idFilm) {
-        if (films.get(idFilm) == null || idUser == null || idUser <= 0) {
-            throw new NotFoundException("film not found");
-        }
-        users.remove(idUser);
+        films.get(idFilm).removeLike(idUser);
         films.get(idFilm).setRate(films.get(idFilm).getRate() - 1);
     }
 
     @Override
-    public List<Optional<Film>> getOrderRate(Integer limit) {
-        List<Optional<Film>> filmRate = new ArrayList<>();
+    public List<Film> getOrderRate(Integer count) {
+        if (count == null || count < 1) {
+            throw new ValidateException("Количество фильмов должно быть > 0");
+        }
+        List<Film> filmRate = new ArrayList<>();
+        if (films.size() < count) {
+            count = films.size();
+        }
+        while (filmRate.size() != count) {
+            Map<Long, Film> films1 = new HashMap<>(films);
+            Long max = 0L;
+            Long id = 0L;
+            for (Film f: films1.values()) {
+                if (f.getRate() > max) {
+                    max = f.getRate();
+                    id = f.getId();
+                }
+            }
+            filmRate.add(films1.get(id));
+            films1.remove(id);
+        }
         return filmRate;
     }
 }
