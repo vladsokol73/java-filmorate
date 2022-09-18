@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Component
+@Primary
 public class DbFilmStorage implements FilmStorage {
     private static final LocalDate LOW_RELEASE_DATE = LocalDate.of(1895, 12, 28);
     private final JdbcTemplate jdbcTemplate;
