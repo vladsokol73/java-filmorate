@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,10 +20,11 @@ class FilmorateUserTests {
     @Autowired
     private UserController userController;
 
-    @AfterEach
-    public void clear() {
-        userController.deleteUsers();
+    @BeforeEach
+    public void clearDB() {
+        //userController.deleteUsers();
     }
+
 
     @Test
     public void userControllerValidEntityTest() throws ValidateException {
@@ -71,6 +72,20 @@ class FilmorateUserTests {
         user.setEmail("user2@example");
 
         assertThrows(RuntimeException.class, () -> userController.createUser(user));
+    }
+
+    @Test
+    public void userControllerUpdateTest() throws ValidateException {
+        User user = new User(1L, "user1@example", "User1"
+                , "user1", LocalDate.of(2000, 1, 1));
+
+        User userUpd = new User(1L, "userNew@example", "UserNew"
+                , "userNew", LocalDate.of(2002, 1, 1));
+
+        userController.deleteUsers();
+        userController.createUser(user);
+        userController.updateUser(userUpd);
+        Assertions.assertEquals(userController.getCountUsers(), 1, "ожидается - обновлен 1 пользователь");
     }
 
     @Test

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service.user;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.controller.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -9,11 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class InMemoryUserService implements UserService {
+public class UserDBService implements UserService {
 
     private final UserStorage userStorage;
 
-    public InMemoryUserService(UserStorage userStorage) {
+    public UserDBService(@Qualifier("dbUserStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -49,7 +50,7 @@ public class InMemoryUserService implements UserService {
 
     @Override
     public void addFriend(Long id1, Long id2) {
-        if (userStorage.getById(id1).isPresent() && userStorage.getById(id2).isPresent()
+        if (userStorage.getById(id1) != null && userStorage.getById(id2) != null
                 && !(id1 <= 0) && !(id2 <= 0)) {
             userStorage.addFriend(id1, id2);
         } else {
